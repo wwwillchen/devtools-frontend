@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<!-- load D3js -->
+<script src="http://d3plus.org/js/d3.js"></script>
+
+<!-- load D3plus after D3js -->
+<script src="http://d3plus.org/js/d3plus.js"></script>
+<script src="modules.js"></script>
+<!-- create container element for visualization -->
+<div id="viz"></div>
+
+<script>
+function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+var PER_DIMENSION = 5;
+var SIZE = 10;
+  // instantiate d3plus
+  var m = modules.map(([k, v])=> {return {source: k, target: v}});
+  var visualization = d3plus.viz()
+    .container("#viz")  // container DIV to hold the visualization
+    .type("rings")    // visualization type
+    // .data(nodes.map((n) => {return {name: n, size: SIZE}}))  // sample dataset to attach to nodes
+    // .nodes(nodes.map((n, i) => {return {
+    //     name: n,
+    //     x: (i % PER_DIMENSION) * SIZE * 3,
+    //     y: Math.floor(i/PER_DIMENSION) * SIZE * 3,
+    //   }}))   // x and y position of nodes
+    .edges(m) // list of node connections
+    .edges({"arrows": true})
+    .focus(getParameterByName('id') || "sdk")     // ID of the initial center node
+    // .size("size")       // key to size the nodes
+    // .id("name")         // key for which our data is unique on
+    .draw()             // finally, draw the visualization!
+</script>
